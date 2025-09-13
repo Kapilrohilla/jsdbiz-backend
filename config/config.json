@@ -1,0 +1,37 @@
+{
+  "development": {
+    "url": "mysql://root:123456789@localhost:3306/ivisa",
+    "username": "root",
+    "password": "123456789",
+    "database": "ivisa",
+    "host": "127.0.0.1",
+    "port": 3306,
+    "dialect": "mysql",
+    "logging": false
+  },
+  "test": {
+    "url": "mysql://root:123456789@localhost:3306/ivisa_test",
+    "username": "root",
+    "password": "123456789",
+    "database": "ivisa_test",
+    "host": "127.0.0.1",
+    "port": 3306,
+    "dialect": "mysql",
+    "logging": false
+  },
+  "production": {
+    "url": "mysql://USER:PASS@HOST:3306/ivisa_prod",
+    "username": "${DB_USER}",
+    "password": "${DB_PASS}",
+    "database": "${DB_NAME}",
+    "host": "${DB_HOST}",
+    "port": "${DB_PORT}",
+    "dialect": "mysql",
+    "dialectOptions": {
+      "ssl": {
+        "require": false
+      }
+    },
+    "logging": false
+  }
+}
