@@ -24,11 +24,11 @@ module.exports = (sequelize, DataTypes) => {
       },
       arrival_date: {
         type: DataTypes.DATE,
-        allowNull: true,
+        allowNull: false,
       },
       departure_date: {
         type: DataTypes.DATE,
-        allowNull: true,
+        allowNull: false,
       },
       destination_country: {
         type: DataTypes.STRING,
