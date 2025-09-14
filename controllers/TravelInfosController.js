@@ -95,4 +95,18 @@ async function remove(req, res) {
   }
 }
 
-module.exports = { create, update, remove };
+async function getAllTravelInfos(req, res) {
+  try {
+    const applicationId = req.query.applicationId;
+    if (!applicationId) {
+      return res.status(401).json({ type: "error", message: "Not authorized" });
+    }
+    const travelInfos = await service.getAllTravelInfos(applicationId);
+    return res.json({ type: "success", data: travelInfos });
+  } catch (err) {
+    return res
+      .status(err.status || 500)
+      .json({ type: "error", message: err.message || "Internal Server Error" });
+  }
+}
+module.exports = { create, update, remove, getAllTravelInfos  };

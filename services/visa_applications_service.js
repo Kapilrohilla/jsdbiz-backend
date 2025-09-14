@@ -43,11 +43,16 @@ async function deleteVisaApplication(userId, visaApplicationId) {
   }
   return true;
 }
-
+async function getAllVisaApplications(userId) {
+  const visaApplications = await VisaApplications.findAll({ where: { user_id: userId } ,order: [['created_at', 'DESC']]});
+  console.log("visaApplications", visaApplications);
+  return visaApplications;
+}
 module.exports = {
   createVisaApplication,
   updateVisaApplication,
   deleteVisaApplication,
+  getAllVisaApplications,
 };
 
 

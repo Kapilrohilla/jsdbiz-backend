@@ -52,8 +52,16 @@ async function deleteTravelInfo(userId, travelInfoId) {
   return true;
 }
 
+  // getAllTravelInfos  
+async function getAllTravelInfos(applicationId) {
+console.log("applicationId", applicationId);
+  const travelInfos = await TravelInfos.findAll({ where: { visa_application_id: applicationId } });
+  console.log("travelInfos", travelInfos);
+  return travelInfos;
+}
 module.exports = {
   createTravelInfo,
   updateTravelInfo,
   deleteTravelInfo,
+  getAllTravelInfos,
 };
