@@ -25,9 +25,13 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.STRING,
         allowNull: true,
       },
-      nationality: {
-        type: DataTypes.STRING,
+      nationality_country_id: {
+        type: DataTypes.UUID,
         allowNull: true,
+        references: {
+        model: "Countries", 
+        key: "id"
+        },
       },
       gender: {
         type: DataTypes.STRING,
@@ -37,13 +41,21 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.STRING,
         allowNull: true,
       },
-      country_of_birth: {
-        type: DataTypes.STRING,
+      country_of_birth_id: {
+        type: DataTypes.UUID,
         allowNull: true,
+        references: {
+        model: "Countries", 
+        key: "id"
+        },
       },
-      country_of_residence: {
-        type: DataTypes.STRING,
+      country_of_residence_id: {
+        type: DataTypes.UUID,
         allowNull: true,
+        references: {
+        model: "Countries", 
+        key: "id"
+        },
       },
       passport_number: {
         type: DataTypes.STRING,

@@ -26,11 +26,11 @@ async function create(req, res) {
         visa_application_id: Joi.string().guid().required(),
         first_name: Joi.string().optional(),
         last_name: Joi.string().optional(),
-        nationality: Joi.string().optional(),
+        nationality_country_id: Joi.string().guid().optional(),
         gender: Joi.string().optional(),
         date_of_birth: Joi.string().optional(),
-        country_of_birth: Joi.string().optional(),
-        country_of_residence: Joi.string().optional(),
+        country_of_birth_id: Joi.string().guid().optional(),
+        country_of_residence_id: Joi.string().guid().optional(),
         passport_number: Joi.string().required(),
         passport_expiration_date: Joi.date().iso().required(),
         passport_issue_date: Joi.date().iso().required(),
@@ -54,16 +54,15 @@ async function update(req, res) {
       return res.status(401).json({ type: "error", message: "Not authorized" });
     }
     const { id } = req.params;
-    const existing = null; // handled in service
     const updates = validate(
       {
         first_name: Joi.string().optional(),
         last_name: Joi.string().optional(),
-        nationality: Joi.string().optional(),
+        nationality_country_id: Joi.string().guid().optional(),
         gender: Joi.string().optional(),
         date_of_birth: Joi.string().optional(),
-        country_of_birth: Joi.string().optional(),
-        country_of_residence: Joi.string().optional(),
+        country_of_birth_id: Joi.string().guid().optional(),
+        country_of_residence_id: Joi.string().guid().optional(),
         passport_number: Joi.string().optional(),
         passport_expiration_date: Joi.date().iso().optional(),
         passport_issue_date: Joi.date().iso().optional(),

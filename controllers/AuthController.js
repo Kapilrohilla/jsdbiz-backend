@@ -128,4 +128,27 @@ async function logOut(req, res) {
   }
 }
 
-module.exports = { signUp, login, logOut };
+async function updateUser(req, res) {
+  try {
+    const body = validate(
+      {
+        first_name: Joi.string().min(2).max(120).optional(),
+        last_name: Joi.string().min(2).max(120).optional().allow(null),
+        email: Joi.string().email().optional(),
+        phone_number: Joi.string().optional().allow(null),
+        password: Joi.string().min(6).max(128).optional(),
+        id: Joi.string().guid().required(),
+      },
+      req.body
+    );
+    const updated = await userService.updateUser(body.id, body);
+    const payload = _.omit(updated.toJSON(), ["password"]);
+    return res.json({ type: "success", user: payload });
+  } catch (err) {
+    return res
+      .status(err.status || 500)
+      .json({ type: "error", message: err.message || "Failed to update user" });
+  }
+}
+
+module.exports = { signUp, login, logOut, updateUser };

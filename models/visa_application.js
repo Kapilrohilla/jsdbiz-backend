@@ -14,25 +14,45 @@ module.exports = (sequelize, DataTypes) => {
         allowNull: false,
         references: { model: "Users", key: "id" },
       },
-      from_country: {
-        type: DataTypes.STRING,
-        allowNull: true,
+      from_country_id: {
+        type: DataTypes.UUID,
+        allowNull: false,
+        references: {
+        model: "Countries", 
+        key: "id"
+        },
       },
-      to_country: {
-        type: DataTypes.STRING,
-        allowNull: true,
+      to_country_id: {
+        type: DataTypes.UUID,
+        allowNull: false,
+        references: {
+        model: "Countries",
+        key: "id" 
+        },
       },
       arrival_date: {
         type: DataTypes.DATE,
-        allowNull: false,
+        allowNull: true,
       },
       departure_date: {
         type: DataTypes.DATE,
-        allowNull: false,
-      },
-      destination_country: {
-        type: DataTypes.STRING,
         allowNull: true,
+      },
+      destination_country_id: {
+        type: DataTypes.UUID,
+        allowNull: true,
+        references: {
+        model: "Countries",
+        key: "id" 
+        },
+      },
+      own_country_id: {
+        type: DataTypes.UUID,
+        allowNull: true,
+        references: {
+        model: "Countries",
+        key: "id" 
+        },
       },
       contact_number: {
         type: DataTypes.STRING,

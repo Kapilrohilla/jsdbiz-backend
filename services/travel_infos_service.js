@@ -1,4 +1,28 @@
-const { TravelInfos, VisaApplications } = require("../models");
+const { TravelInfos, VisaApplications, Countries } = require("../models");
+const { Op } = require("sequelize");
+
+async function assertCountryIdsExist(ids) {
+  const uniqueIds = Array.from(new Set((ids || []).filter(Boolean)));
+  if (!uniqueIds.length) return;
+  const found = await Countries.findAll({
+    where: { id: { [Op.in]: uniqueIds } },
+    attributes: ["id"],
+    paranoid: false,
+  });
+  const foundIds = new Set(found.map((c) => c.id));
+  const missing = uniqueIds.filter((id) => !foundIds.has(id));
+  if (missing.length) {
+    const err = new Error(`Invalid country id(s): ${missing.join(", ")}`);
+    err.status = 400;
+    throw err;
+  }
+}
+
+const countryIncludes = [
+  { model: Countries, as: "nationality_country", attributes: ["id", "name", "code", "iso_code"] },
+  { model: Countries, as: "country_of_birth", attributes: ["id", "name", "code", "iso_code"] },
+  { model: Countries, as: "country_of_residence", attributes: ["id", "name", "code", "iso_code"] },
+];
 
 async function ownsVisaApplication(userId, visaApplicationId) {
   const va = await VisaApplications.findOne({
@@ -14,8 +38,14 @@ async function createTravelInfo(userId, payload) {
     err.status = 403;
     throw err;
   }
+  await assertCountryIdsExist([
+    payload.nationality_country_id,
+    payload.country_of_birth_id,
+    payload.country_of_residence_id,
+  ]);
   const created = await TravelInfos.create(payload);
-  return created;
+  const withIncludes = await TravelInfos.findByPk(created.id, { include: countryIncludes });
+  return withIncludes || created;
 }
 
 async function updateTravelInfo(userId, travelInfoId, updates) {
@@ -31,8 +61,14 @@ async function updateTravelInfo(userId, travelInfoId, updates) {
     err.status = 403;
     throw err;
   }
+  await assertCountryIdsExist([
+    updates.nationality_country_id,
+    updates.country_of_birth_id,
+    updates.country_of_residence_id,
+  ]);
   await existing.update(updates);
-  return existing;
+  const withIncludes = await TravelInfos.findByPk(existing.id, { include: countryIncludes });
+  return withIncludes || existing;
 }
 
 async function deleteTravelInfo(userId, travelInfoId) {
@@ -55,7 +91,7 @@ async function deleteTravelInfo(userId, travelInfoId) {
   // getAllTravelInfos  
 async function getAllTravelInfos(applicationId) {
 console.log("applicationId", applicationId);
-  const travelInfos = await TravelInfos.findAll({ where: { visa_application_id: applicationId } });
+  const travelInfos = await TravelInfos.findAll({ where: { visa_application_id: applicationId }, include: countryIncludes });
   console.log("travelInfos", travelInfos);
   return travelInfos;
 }

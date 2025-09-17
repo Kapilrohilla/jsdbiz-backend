@@ -11,6 +11,22 @@ const print = (level, message, meta) => {
 		}
 		return;
 	}
+	if (level === 'error') {
+		if (meta instanceof Error) {
+			console.error(text, { name: meta.name, message: meta.message, stack: meta.stack });
+			return;
+		}
+		if (meta && meta.stack) {
+			console.error(text, meta);
+			return;
+		}
+		if (meta !== undefined) {
+			console.error(text, meta);
+		} else {
+			console.error(text);
+		}
+		return;
+	}
 	if (meta !== undefined) {
 		console.log(text, meta);
 	} else {
@@ -24,6 +40,9 @@ const logger = {
 	},
 	warn(message, meta) {
 		print('warn', message, meta);
+	},
+	error(message, meta) {
+		print('error', message, meta);
 	},
 };
 

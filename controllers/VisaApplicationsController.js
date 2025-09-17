@@ -32,11 +32,13 @@ async function create(req, res) {
 
     const payload = validate(
       {
-        from_country: Joi.string().optional(),
-        to_country: Joi.string().optional(),
-        arrival_date: Joi.date().iso().required(),
-        departure_date: Joi.date().iso().required(),
-        destination_country: Joi.string().optional(),
+        from_country_id: Joi.string().guid().required(),
+        to_country_id: Joi.string().guid().required(),
+        arrival_date: Joi.date().iso().optional(),
+        departure_date: Joi.date().iso().optional(),
+        destination_country_id: Joi.string().guid().optional(),
+        own_country_id: Joi.string().guid().required(),
+        
         contact_number: Joi.string().optional(),
         email: Joi.string().email().optional(),
         duration_of_stay: Joi.number().integer().min(0).optional(),
@@ -45,7 +47,7 @@ async function create(req, res) {
         airline: Joi.string().optional(),
         itinerary_number: Joi.string().optional(),
         purpose: Joi.string().optional(),
-        status: Joi.string().valid(statusEnum).optional(),
+        status: Joi.string().valid(...statusEnum).optional(),
       },
       req.body
     );
@@ -77,11 +79,12 @@ async function update(req, res) {
     const { id } = req.params;
     const updates = validate(
       {
-        from_country: Joi.string().optional(),
-        to_country: Joi.string().optional(),
+        from_country_id: Joi.string().guid().optional(),
+        to_country_id: Joi.string().guid().optional(),
         arrival_date: Joi.date().iso().optional(),
         departure_date: Joi.date().iso().optional(),
-        destination_country: Joi.string().optional(),
+        destination_country_id: Joi.string().guid().optional(),
+        own_country_id: Joi.string().guid().optional(),
         contact_number: Joi.string().optional(),
         email: Joi.string().email().optional(),
         duration_of_stay: Joi.number().integer().min(0).optional(),
@@ -90,7 +93,7 @@ async function update(req, res) {
         airline: Joi.string().optional(),
         itinerary_number: Joi.string().optional(),
         purpose: Joi.string().optional(),
-        status: Joi.string().valid(statusEnum).optional(),
+        status: Joi.string().valid(...statusEnum).optional(),
       },
       req.body
     );
