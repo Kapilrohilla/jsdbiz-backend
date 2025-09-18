@@ -37,7 +37,7 @@ async function create(req, res) {
         arrival_date: Joi.date().iso().optional(),
         departure_date: Joi.date().iso().optional(),
         destination_country_id: Joi.string().guid().optional(),
-        own_country_id: Joi.string().guid().required(),
+        own_country_id: Joi.string().guid().optional(),
         
         contact_number: Joi.string().optional(),
         email: Joi.string().email().optional(),

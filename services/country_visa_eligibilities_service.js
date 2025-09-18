@@ -3,12 +3,7 @@ const { Countries, CountryVisaEligibilities } = require("../models");
 async function listEligibilities({ from_country_id, to_country_id }) {
   const where = {};
   const include = [
-    {
-      model: Countries,
-      as: "from_country",
-      attributes: ["id", "code", "name"],
-    },
-    { model: Countries, as: "to_country", attributes: ["id", "code", "name"] },
+    { model: Countries, as: "to_country", attributes: ["id", "code", "name",'flag_url'] },
   ];
   if (from_country_id) {
     where.from_country_id = from_country_id;
@@ -21,6 +16,7 @@ async function listEligibilities({ from_country_id, to_country_id }) {
     include,
     order: [["updatedAt", "DESC"]],
   });
+  console.log('rows', rows);
   return rows;
 }
 

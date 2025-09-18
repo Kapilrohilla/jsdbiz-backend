@@ -25,7 +25,21 @@ async function list(req, res) {
       req.query
     );
     const rows = await service.listEligibilities(query);
-    return res.json({ type: 'success', data: rows });
+    // Transform to unique list of destination countries with desired fields
+    const uniqueById = new Map();
+    rows.forEach((row) => {
+      const c = row && row.to_country;
+      if (c && !uniqueById.has(c.id)) {
+        uniqueById.set(c.id, {
+          id: c.id,
+          code: c.code,
+          name: c.name,
+          flag: c.flag_url || null,
+        });
+      }
+    });
+    const data = Array.from(uniqueById.values());
+    return res.json({ type: 'success', data });
   } catch (err) {
     return res.status(err.status || 500).json({ type: 'error', message: err.message || 'Failed to list eligibilities' });
   }
